@@ -1,0 +1,17 @@
+{
+  "version": "0.1",
+  "kind": "policy_status",
+  "message_id": "policy_status-1",
+  "subject_id": "fixture-a",
+  "run_id": "run-a",
+  "issued_at": "2026-10-23T22:00:00-04:00",
+  "body": {
+    "proposal_id": "proposal-1",
+    "state": "deferred",
+    "desired_revision": "policy-2",
+    "effective_revision": "policy-1",
+    "hardware_revision": null,
+    "boundary": "between_points",
+    "reason": "Current admitted trajectory still uses policy-1."
+  }
+}

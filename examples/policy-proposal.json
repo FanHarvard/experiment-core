@@ -1,0 +1,19 @@
+{
+  "version": "0.1",
+  "kind": "policy_proposal",
+  "message_id": "policy_proposal-1",
+  "subject_id": "fixture-a",
+  "run_id": "run-a",
+  "issued_at": "2026-10-23T22:00:00-04:00",
+  "body": {
+    "expected_policy_revision": "policy-1",
+    "changes": [
+      {
+        "parameter_id": "axis.max_step",
+        "old": 0.1,
+        "new": 0.2
+      }
+    ],
+    "reason": "Draft example only; no approval or physical operation."
+  }
+}

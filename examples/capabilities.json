@@ -1,0 +1,51 @@
+{
+  "version": "0.1",
+  "kind": "capabilities",
+  "message_id": "capabilities-1",
+  "subject_id": "fixture-a",
+  "run_id": "run-a",
+  "issued_at": "2026-10-23T22:00:00-04:00",
+  "body": {
+    "revisions": {
+      "configuration": "cfg-1",
+      "policy": "policy-1",
+      "owner_state": "state-1"
+    },
+    "operations": [
+      {
+        "capability_id": "fixture.measure_point",
+        "effect": "control",
+        "access": "attached",
+        "resource_ids": [
+          "axis-a"
+        ],
+        "available": true,
+        "reason": "",
+        "parameter_schema_id": "fixture.point.v1",
+        "result_schema_id": "fixture.point-result.v1",
+        "adoption_boundaries": [
+          "between_points"
+        ]
+      }
+    ],
+    "parameters": [
+      {
+        "parameter_id": "axis.max_step",
+        "value_schema_id": "fixture.distance.v1",
+        "unit": "mm",
+        "owner_role": "application",
+        "classification": "safety",
+        "approval": "exact_human_approval",
+        "adoption": "live_boundary",
+        "boundaries": [
+          "between_points"
+        ],
+        "coupled_group": "axis-motion",
+        "validator_id": "fixture.motion-proof.v1",
+        "enforcement_scope": [
+          "host_command"
+        ]
+      }
+    ]
+  }
+}

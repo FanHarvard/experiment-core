@@ -1,0 +1,32 @@
+{
+  "version": "0.1",
+  "kind": "measurement",
+  "message_id": "measurement-1",
+  "subject_id": "fixture-a",
+  "run_id": "run-a",
+  "issued_at": "2026-10-23T22:00:00-04:00",
+  "body": {
+    "observation_id": "obs-1",
+    "revisions": {
+      "configuration": "cfg-1",
+      "policy": "policy-1",
+      "owner_state": "state-1"
+    },
+    "observed_at": "2026-10-23T22:00:00-04:00",
+    "metrics": [
+      {
+        "quantity_id": "temperature",
+        "unit": "K",
+        "value": 295.1,
+        "state": "valid",
+        "source_time": "2026-10-23T21:59:59-04:00",
+        "reason": ""
+      }
+    ],
+    "quality": {
+      "state": "not_configured",
+      "evaluators": []
+    },
+    "artifacts": []
+  }
+}

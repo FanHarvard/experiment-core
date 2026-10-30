@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "experiment-core"
+version = "0.1.0"
+description = "Domain-neutral contracts and local runtime for supervised experimental operations"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{name = "FanHarvard contributors"}]
+classifiers = ["Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Operating System :: POSIX :: Linux",
+  "Topic :: Scientific/Engineering",
+]
+dependencies = ["jsonschema>=4.19,<5"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+experiment_core = ["schemas/*.json"]
+
+[project.urls]
+Homepage = "https://github.com/FanHarvard/experiment-core"
+Repository = "https://github.com/FanHarvard/experiment-core"
+Issues = "https://github.com/FanHarvard/experiment-core/issues"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--import-mode=importlib"
+norecursedirs = ["support"]

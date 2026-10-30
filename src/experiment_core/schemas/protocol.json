@@ -1,0 +1,984 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:experiment-core:protocol:0.1",
+  "title": "Experimental operation protocol (draft 0.1)",
+  "description": "Structure only. Validation does not authorize execution or certify physical safety.",
+  "type": "object",
+  "properties": {
+    "version": {
+      "const": "0.1"
+    },
+    "kind": {
+      "enum": [
+        "capabilities",
+        "measurement",
+        "operation_request",
+        "decision",
+        "operation_status",
+        "policy_proposal",
+        "policy_status"
+      ]
+    },
+    "message_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+    },
+    "subject_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+    },
+    "issued_at": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-5][0-9](\\.[0-9]+)?([Zz]|[+-]([01][0-9]|2[0-3]):[0-5][0-9])$",
+      "not": {
+        "pattern": "-00:00$"
+      }
+    },
+    "body": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "version",
+    "kind",
+    "message_id",
+    "subject_id",
+    "run_id",
+    "issued_at",
+    "body"
+  ],
+  "additionalProperties": false,
+  "oneOf": [
+    {
+      "properties": {
+        "kind": {
+          "const": "capabilities"
+        },
+        "body": {
+          "$ref": "#/$defs/capabilities"
+        }
+      }
+    },
+    {
+      "properties": {
+        "kind": {
+          "const": "measurement"
+        },
+        "body": {
+          "$ref": "#/$defs/measurement"
+        }
+      }
+    },
+    {
+      "properties": {
+        "kind": {
+          "const": "operation_request"
+        },
+        "body": {
+          "$ref": "#/$defs/operation_request"
+        }
+      }
+    },
+    {
+      "properties": {
+        "kind": {
+          "const": "decision"
+        },
+        "body": {
+          "$ref": "#/$defs/decision"
+        }
+      }
+    },
+    {
+      "properties": {
+        "kind": {
+          "const": "operation_status"
+        },
+        "body": {
+          "$ref": "#/$defs/operation_status"
+        }
+      }
+    },
+    {
+      "properties": {
+        "kind": {
+          "const": "policy_proposal"
+        },
+        "body": {
+          "$ref": "#/$defs/policy_proposal"
+        }
+      }
+    },
+    {
+      "properties": {
+        "kind": {
+          "const": "policy_status"
+        },
+        "body": {
+          "$ref": "#/$defs/policy_status"
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "revisions": {
+      "type": "object",
+      "properties": {
+        "configuration": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "policy": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "owner_state": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        }
+      },
+      "required": [
+        "configuration",
+        "policy",
+        "owner_state"
+      ],
+      "additionalProperties": false
+    },
+    "artifact": {
+      "type": "object",
+      "properties": {
+        "artifact_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "media_type": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        }
+      },
+      "required": [
+        "artifact_id",
+        "sha256",
+        "media_type"
+      ],
+      "additionalProperties": false
+    },
+    "metric": {
+      "type": "object",
+      "properties": {
+        "quantity_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "value": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "state": {
+          "enum": [
+            "valid",
+            "missing",
+            "stale",
+            "invalid"
+          ]
+        },
+        "source_time": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-5][0-9](\\.[0-9]+)?([Zz]|[+-]([01][0-9]|2[0-3]):[0-5][0-9])$",
+              "not": {
+                "pattern": "-00:00$"
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "quantity_id",
+        "unit",
+        "value",
+        "state",
+        "source_time",
+        "reason"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "valid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "type": "number"
+              },
+              "source_time": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-5][0-9](\\.[0-9]+)?([Zz]|[+-]([01][0-9]|2[0-3]):[0-5][0-9])$",
+                "not": {
+                  "pattern": "-00:00$"
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "quality_evaluator": {
+      "type": "object",
+      "properties": {
+        "evaluator_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "state": {
+          "enum": [
+            "good",
+            "degraded",
+            "unavailable"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "evaluator_id",
+        "revision",
+        "state",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "quality": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "enum": [
+            "not_configured",
+            "good",
+            "degraded",
+            "unavailable"
+          ]
+        },
+        "evaluators": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/quality_evaluator"
+          },
+          "maxItems": 128
+        }
+      },
+      "required": [
+        "state",
+        "evaluators"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "not_configured"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evaluators": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "evaluators": {
+                "minItems": 1
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "good"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evaluators": {
+                "items": {
+                  "properties": {
+                    "state": {
+                      "const": "good"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "degraded"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evaluators": {
+                "contains": {
+                  "properties": {
+                    "state": {
+                      "const": "degraded"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "unavailable"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evaluators": {
+                "contains": {
+                  "properties": {
+                    "state": {
+                      "const": "unavailable"
+                    }
+                  },
+                  "required": [
+                    "state"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "measurement": {
+      "type": "object",
+      "properties": {
+        "observation_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "revisions": {
+          "$ref": "#/$defs/revisions"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}[Tt][0-9]{2}:[0-9]{2}:[0-5][0-9](\\.[0-9]+)?([Zz]|[+-]([01][0-9]|2[0-3]):[0-5][0-9])$",
+          "not": {
+            "pattern": "-00:00$"
+          }
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/metric"
+          },
+          "maxItems": 256
+        },
+        "quality": {
+          "$ref": "#/$defs/quality"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact"
+          },
+          "maxItems": 64
+        }
+      },
+      "required": [
+        "observation_id",
+        "revisions",
+        "observed_at",
+        "metrics",
+        "quality",
+        "artifacts"
+      ],
+      "additionalProperties": false
+    },
+    "parameter_spec": {
+      "type": "object",
+      "properties": {
+        "parameter_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "value_schema_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "owner_role": {
+          "enum": [
+            "application",
+            "instrument"
+          ]
+        },
+        "classification": {
+          "enum": [
+            "quality",
+            "operational",
+            "safety",
+            "physical_capability",
+            "calibration"
+          ]
+        },
+        "approval": {
+          "enum": [
+            "standing_authority",
+            "exact_human_approval",
+            "reviewed_transition"
+          ]
+        },
+        "adoption": {
+          "enum": [
+            "live_boundary",
+            "next_run",
+            "idle_transition",
+            "unsupported"
+          ]
+        },
+        "boundaries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+          },
+          "maxItems": 16
+        },
+        "coupled_group": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "validator_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "enforcement_scope": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "host_command",
+              "buffered_trajectory",
+              "autonomous_controller",
+              "observation"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "parameter_id",
+        "value_schema_id",
+        "unit",
+        "owner_role",
+        "classification",
+        "approval",
+        "adoption",
+        "boundaries",
+        "coupled_group",
+        "validator_id",
+        "enforcement_scope"
+      ],
+      "additionalProperties": false
+    },
+    "capability": {
+      "type": "object",
+      "properties": {
+        "capability_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "effect": {
+          "enum": [
+            "observe",
+            "analyze",
+            "control",
+            "configure"
+          ]
+        },
+        "access": {
+          "enum": [
+            "shared",
+            "attached",
+            "exclusive"
+          ]
+        },
+        "resource_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+          },
+          "maxItems": 64,
+          "uniqueItems": true
+        },
+        "available": {
+          "type": "boolean"
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 8192
+        },
+        "parameter_schema_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "result_schema_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "adoption_boundaries": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+          },
+          "maxItems": 16
+        }
+      },
+      "required": [
+        "capability_id",
+        "effect",
+        "access",
+        "resource_ids",
+        "available",
+        "reason",
+        "parameter_schema_id",
+        "result_schema_id",
+        "adoption_boundaries"
+      ],
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "revisions": {
+          "$ref": "#/$defs/revisions"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/capability"
+          },
+          "maxItems": 256
+        },
+        "parameters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/parameter_spec"
+          },
+          "maxItems": 512
+        }
+      },
+      "required": [
+        "revisions",
+        "operations",
+        "parameters"
+      ],
+      "additionalProperties": false
+    },
+    "operation_request": {
+      "type": "object",
+      "properties": {
+        "capability_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "parameter_schema_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "expected": {
+          "$ref": "#/$defs/revisions"
+        },
+        "parent_run_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "execution_mode": {
+          "enum": [
+            "deterministic",
+            "agent",
+            "manual"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "capability_id",
+        "parameter_schema_id",
+        "parameters",
+        "expected",
+        "parent_run_id",
+        "execution_mode",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "properties": {
+        "observation_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "expected": {
+          "$ref": "#/$defs/revisions"
+        },
+        "action": {
+          "enum": [
+            "execute",
+            "repeat",
+            "evaluate",
+            "finish",
+            "cancel"
+          ]
+        },
+        "capability_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parameter_schema_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "parameters": {
+          "type": "object"
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "observation_id",
+        "expected",
+        "action",
+        "capability_id",
+        "parameter_schema_id",
+        "parameters",
+        "reason"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "action": {
+                "enum": [
+                  "execute",
+                  "repeat",
+                  "evaluate"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "capability_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+              },
+              "parameter_schema_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "capability_id": {
+                "type": "null"
+              },
+              "parameter_schema_id": {
+                "type": "null"
+              },
+              "parameters": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "operation_status": {
+      "type": "object",
+      "properties": {
+        "request_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "state": {
+          "enum": [
+            "queued",
+            "running",
+            "waiting_decision",
+            "waiting_approval",
+            "cancelling",
+            "succeeded",
+            "inconclusive",
+            "cancelled",
+            "failed",
+            "uncertain"
+          ]
+        },
+        "effect_state": {
+          "enum": [
+            "not_started",
+            "confirmed",
+            "uncertain"
+          ]
+        },
+        "revisions": {
+          "$ref": "#/$defs/revisions"
+        },
+        "objective": {
+          "enum": [
+            "not_evaluated",
+            "achieved",
+            "not_achieved",
+            "inconclusive"
+          ]
+        },
+        "quality": {
+          "$ref": "#/$defs/quality"
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 8192
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact"
+          },
+          "maxItems": 64
+        }
+      },
+      "required": [
+        "request_id",
+        "state",
+        "effect_state",
+        "revisions",
+        "objective",
+        "quality",
+        "reason",
+        "artifacts"
+      ],
+      "additionalProperties": false
+    },
+    "change": {
+      "type": "object",
+      "properties": {
+        "parameter_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "old": {},
+        "new": {}
+      },
+      "required": [
+        "parameter_id",
+        "old",
+        "new"
+      ],
+      "additionalProperties": false
+    },
+    "policy_proposal": {
+      "type": "object",
+      "properties": {
+        "expected_policy_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/change"
+          },
+          "minItems": 1,
+          "maxItems": 256
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "expected_policy_revision",
+        "changes",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "policy_status": {
+      "type": "object",
+      "properties": {
+        "proposal_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "state": {
+          "enum": [
+            "proposed",
+            "awaiting_approval",
+            "prepared",
+            "deferred",
+            "applied",
+            "rejected",
+            "uncertain"
+          ]
+        },
+        "desired_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "effective_revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+        },
+        "hardware_revision": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "boundary": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:-]{0,159}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "proposal_id",
+        "state",
+        "desired_revision",
+        "effective_revision",
+        "hardware_revision",
+        "boundary",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

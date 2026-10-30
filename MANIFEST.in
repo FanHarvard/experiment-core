@@ -1,0 +1,7 @@
+include LICENSE README.md
+recursive-include docs *.html
+recursive-include scripts *.py
+recursive-include tests *.py *.cjs *.json *.yaml
+recursive-include examples *.json
+global-exclude __pycache__ *.py[cod] .env .pypirc *.pem *.key
+include .secrets.baseline

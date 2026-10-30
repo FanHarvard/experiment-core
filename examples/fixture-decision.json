@@ -1,0 +1,23 @@
+{
+  "version": "0.1",
+  "kind": "decision",
+  "message_id": "decision-1",
+  "subject_id": "fixture-a",
+  "run_id": "run-a",
+  "issued_at": "2026-10-23T22:00:00-04:00",
+  "body": {
+    "observation_id": "obs-1",
+    "expected": {
+      "configuration": "cfg-1",
+      "policy": "policy-1",
+      "owner_state": "state-1"
+    },
+    "action": "execute",
+    "capability_id": "fixture.measure_point",
+    "parameter_schema_id": "fixture.point.v1",
+    "parameters": {
+      "position_mm": 1.2
+    },
+    "reason": "Measure the next point in the approved interval."
+  }
+}

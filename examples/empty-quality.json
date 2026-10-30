@@ -1,0 +1,25 @@
+{
+  "version": "0.1",
+  "kind": "operation_status",
+  "message_id": "operation_status-1",
+  "subject_id": "fixture-a",
+  "run_id": "run-a",
+  "issued_at": "2026-10-23T22:00:00-04:00",
+  "body": {
+    "request_id": "request-1",
+    "state": "running",
+    "effect_state": "confirmed",
+    "revisions": {
+      "configuration": "cfg-1",
+      "policy": "policy-1",
+      "owner_state": "state-1"
+    },
+    "objective": "not_evaluated",
+    "quality": {
+      "state": "not_configured",
+      "evaluators": []
+    },
+    "reason": "No optional quality evaluator configured.",
+    "artifacts": []
+  }
+}
