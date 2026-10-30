@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/FanHarvard/experiment-core/main/docs/icon.png" alt="Experiment core: a central module connecting experimental operations" width="64" height="64">
+
 # experiment-core
 
 **Still in active development.**
